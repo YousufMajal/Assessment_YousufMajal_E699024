@@ -10,7 +10,5 @@ public sealed class OutboxOptions
 
     public int BatchSize { get; set; } = 10;
 
-    public int DefaultBatchSize { get; set; } = 50;
-
     public TimeSpan ProcessingInterval => TimeSpan.FromSeconds(ProcessingIntervalSeconds);
 }

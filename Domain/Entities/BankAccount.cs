@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities;
 
-public class BankAccount
+public record BankAccount
 {
     public Guid AccountId { get; set; }
     public decimal Balance { get; set; }

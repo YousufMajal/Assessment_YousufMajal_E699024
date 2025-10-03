@@ -1,9 +1,9 @@
 using Application.Abstractions;
 using Application.DTOs;
 using Application.Errors;
-using Application.Events;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
+using Domain.Events;
 
 namespace Application.CQRS.Commands.Withdraw;
 
@@ -40,7 +40,7 @@ internal sealed class WithdrawCommandHandler : ICommandHandler<WithdrawCommand, 
         account.Balance -= command.Amount;
         _accounts.Update(account);
 
-        var integrationEvent = new WithdrawalEvent(
+        var withdrawalEvent = new WithdrawalEvent(
             EventId: Guid.NewGuid(),
             AccountId: command.AccountId,
             Amount: command.Amount,
@@ -48,7 +48,7 @@ internal sealed class WithdrawCommandHandler : ICommandHandler<WithdrawCommand, 
             NewBalance: account.Balance,
             OccurredUtc: DateTime.UtcNow);
 
-        _outbox.Enqueue(integrationEvent, "banking.withdrawal.performed.v1");
+        _outbox.Enqueue(withdrawalEvent, "banking.withdrawal.performed.v1");
 
         var dto = new WithdrawalResultDto(
             AccountId: command.AccountId,

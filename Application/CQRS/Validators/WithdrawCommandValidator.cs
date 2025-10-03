@@ -12,7 +12,7 @@ internal sealed class WithdrawCommandValidator : AbstractValidator<WithdrawComma
         var options = businessRulesOptions.Value;
 
         RuleFor(x => x.AccountId)
-            .NotEmpty().WithMessage("AccountId must is required");
+            .NotEmpty().WithMessage("AccountId is required");
 
         RuleFor(x => x.Amount)
             .GreaterThan(options.MinWithdrawalAmount).WithMessage($"Withdrawal amount must be greater than {options.MinWithdrawalAmount}")

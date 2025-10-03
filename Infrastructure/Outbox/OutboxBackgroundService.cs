@@ -1,6 +1,6 @@
-using Application.Events;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
+using Domain.Events;
 using Infrastructure.Aws;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
