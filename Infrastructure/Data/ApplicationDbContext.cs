@@ -10,6 +10,6 @@ public partial class ApplicationDbContext : DbContext
     {
     }
 
-    public virtual DbSet<UserAccount> UserAccount { get; set; }
+    public virtual DbSet<BankAccount> UserAccount { get; set; }
     public virtual DbSet<OutboxMessage> OutboxMessages { get; set; }
 }

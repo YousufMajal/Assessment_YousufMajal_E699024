@@ -1,6 +1,6 @@
 namespace Application.Events;
 
-public sealed record WithdrawalPerformedIntegrationEvent(
+public sealed record WithdrawalEvent(
     Guid EventId,
     Guid AccountId,
     decimal Amount,

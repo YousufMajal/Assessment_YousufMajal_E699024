@@ -7,14 +7,14 @@ using Application.Interfaces.Repositories;
 
 namespace Application.CQRS.Commands.Withdraw;
 
-internal sealed class WithdrawFundsCommandHandler : ICommandHandler<WithdrawFundsCommand, WithdrawalResultDto>
+internal sealed class WithdrawCommandHandler : ICommandHandler<WithdrawCommand, WithdrawalResultDto>
 {
     private readonly IAccountRepository _accounts;
     private readonly IOutboxWriter _outbox;
     private static readonly Error AccountNotFound = AccountErrorResponses.AccountNotFoundError();
     private static readonly Error InsufficientFunds = AccountErrorResponses.InsufficientFundsError();
 
-    public WithdrawFundsCommandHandler(
+    public WithdrawCommandHandler(
         IAccountRepository accounts,
         IOutboxWriter outbox)
     {
@@ -22,7 +22,7 @@ internal sealed class WithdrawFundsCommandHandler : ICommandHandler<WithdrawFund
         _outbox = outbox;
     }
 
-    public async Task<Result<WithdrawalResultDto>> Handle(WithdrawFundsCommand command, CancellationToken cancellationToken)
+    public async Task<Result<WithdrawalResultDto>> Handle(WithdrawCommand command, CancellationToken cancellationToken)
     {
         // Check if account exists & get balance
         var account = await _accounts.GetByIdAsync(command.AccountId);
@@ -30,22 +30,22 @@ internal sealed class WithdrawFundsCommandHandler : ICommandHandler<WithdrawFund
         {
             return Result.Failure<WithdrawalResultDto>(AccountNotFound);
         }
-        var previous = account.balance;
+        var previous = account.Balance;
 
         if (previous < command.Amount)
         {
             return Result.Failure<WithdrawalResultDto>(InsufficientFunds);
         }
 
-        account.balance -= command.Amount;
+        account.Balance -= command.Amount;
         _accounts.Update(account);
 
-        var integrationEvent = new WithdrawalPerformedIntegrationEvent(
+        var integrationEvent = new WithdrawalEvent(
             EventId: Guid.NewGuid(),
             AccountId: command.AccountId,
             Amount: command.Amount,
             PreviousBalance: previous,
-            NewBalance: account.balance,
+            NewBalance: account.Balance,
             OccurredUtc: DateTime.UtcNow);
 
         _outbox.Enqueue(integrationEvent, "banking.withdrawal.performed.v1");
@@ -54,7 +54,7 @@ internal sealed class WithdrawFundsCommandHandler : ICommandHandler<WithdrawFund
             AccountId: command.AccountId,
             PreviousBalance: previous,
             WithdrawnAmount: command.Amount,
-            NewBalance: account.balance,
+            NewBalance: account.Balance,
             EventStatus: "ENQUEUED",
             TimestampUtc: DateTime.UtcNow);
 

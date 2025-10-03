@@ -38,7 +38,7 @@ public static class DependencyInjection
     private static void AddConfigurationOptions(IServiceCollection services, IConfiguration configuration)
     {
         // Infrastructure configuration options
-        services.Configure<OutboxProcessorOptions>(configuration.GetSection(OutboxProcessorOptions.SectionName));
+        services.Configure<OutboxOptions>(configuration.GetSection(OutboxOptions.SectionName));
     }
 
     private static void AddDatabase(IServiceCollection services, IConfiguration configuration)
@@ -87,6 +87,6 @@ public static class DependencyInjection
     private static void AddBackgroundServices(IServiceCollection services)
     {
         // Background services for outbox processing
-        services.AddHostedService<OutboxProcessorHostedService>();
+        services.AddHostedService<OutboxBackgroundService>();
     }
 }

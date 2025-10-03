@@ -12,16 +12,16 @@ namespace Infrastructure.Outbox;
 
 // Shell Service implementing Outbox Pattern to ensure Transactional Integrity, Resilience to external Failures, At-Least-Once Delivery Guarantee.
 
-public sealed class OutboxProcessorHostedService : BackgroundService
+public sealed class OutboxBackgroundService : BackgroundService
 {
-    private readonly ILogger<OutboxProcessorHostedService> _logger;
+    private readonly ILogger<OutboxBackgroundService> _logger;
     private readonly IServiceScopeFactory _serviceScopeFactory;
-    private readonly OutboxProcessorOptions _options;
+    private readonly OutboxOptions _options;
 
-    public OutboxProcessorHostedService(
-        ILogger<OutboxProcessorHostedService> logger,
+    public OutboxBackgroundService(
+        ILogger<OutboxBackgroundService> logger,
         IServiceScopeFactory serviceScopeFactory,
-        IOptions<OutboxProcessorOptions> options)
+        IOptions<OutboxOptions> options)
     {
         _logger = logger;
         _serviceScopeFactory = serviceScopeFactory;
@@ -130,14 +130,14 @@ public sealed class OutboxProcessorHostedService : BackgroundService
     /// Deserializes withdrawal event, then publishes it to SNS.
     private async Task PublishWithdrawalEventToSns(OutboxMessage message, AwsSnsService snsService, CancellationToken cancellationToken)
     {
-        var withdrawalEvent = JsonSerializer.Deserialize<WithdrawalPerformedIntegrationEvent>(message.Content);
+        var withdrawalEvent = JsonSerializer.Deserialize<WithdrawalEvent>(message.Content);
 
         if (withdrawalEvent is null)
         {
             throw new InvalidOperationException($"Failed to deserialize withdrawal event from message {message.Id}");
         }
 
-        var withdrawalDto = new Application.DTOs.WithdrawalEventDto(
+        var withdrawalDto = new Application.DTOs.WithdrawalEventData(
             AccountId: withdrawalEvent.AccountId,
             Amount: withdrawalEvent.Amount,
             PreviousBalance: withdrawalEvent.PreviousBalance,

@@ -1,6 +1,6 @@
 namespace Application.DTOs;
 
-public sealed record WithdrawalEventDto(
+public sealed record WithdrawalEventData(
     Guid AccountId,
     decimal Amount,
     decimal PreviousBalance,

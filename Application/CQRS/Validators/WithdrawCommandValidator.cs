@@ -5,9 +5,9 @@ using Microsoft.Extensions.Options;
 
 namespace Application.CQRS.Validators;
 
-internal sealed class WithdrawFundsCommandValidator : AbstractValidator<WithdrawFundsCommand>
+internal sealed class WithdrawCommandValidator : AbstractValidator<WithdrawCommand>
 {
-    public WithdrawFundsCommandValidator(IOptions<BusinessRulesOptions> businessRulesOptions)
+    public WithdrawCommandValidator(IOptions<BusinessRulesOptions> businessRulesOptions)
     {
         var options = businessRulesOptions.Value;
 

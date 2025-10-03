@@ -79,7 +79,7 @@ public sealed class AwsSnsService
     }
 
     // factory helper method - creates SNS events from withdrawal DTO
-    public SnsEvent CreateWithdrawalEvent(WithdrawalEventDto withdrawalDto)
+    public SnsEvent CreateWithdrawalEvent(WithdrawalEventData withdrawalDto)
     {
         return new SnsEvent(
             EventType: "banking.withdrawal.performed.v1",

@@ -13,24 +13,24 @@ public sealed class AccountRepository : IAccountRepository
         _context = context;
     }
 
-    public async Task<UserAccount?> GetByIdAsync(Guid id)
+    public async Task<BankAccount?> GetByIdAsync(Guid id)
     {
-        return await _context.Set<UserAccount>()
-            .FirstOrDefaultAsync(a => a.accountId == id);
+        return await _context.Set<BankAccount>()
+            .FirstOrDefaultAsync(a => a.AccountId == id);
     }
 
-    public void Add(UserAccount account)
+    public void Add(BankAccount account)
     {
-        _context.Set<UserAccount>().Add(account);
+        _context.Set<BankAccount>().Add(account);
     }
 
-    public void Remove(UserAccount account)
+    public void Remove(BankAccount account)
     {
-        _context.Set<UserAccount>().Remove(account);
+        _context.Set<BankAccount>().Remove(account);
     }
 
-    public void Update(UserAccount account)
+    public void Update(BankAccount account)
     {
-        _context.Set<UserAccount>().Update(account);
+        _context.Set<BankAccount>().Update(account);
     }
 }

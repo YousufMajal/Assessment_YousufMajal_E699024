@@ -4,11 +4,11 @@ namespace Application.Interfaces.Repositories;
 
 public interface IAccountRepository
 {
-    Task<UserAccount?> GetByIdAsync(Guid id);
+    Task<BankAccount?> GetByIdAsync(Guid id);
 
-    void Add(UserAccount account);
+    void Add(BankAccount account);
 
-    void Remove(UserAccount account);
+    void Remove(BankAccount account);
 
-    void Update(UserAccount account);
+    void Update(BankAccount account);
 }

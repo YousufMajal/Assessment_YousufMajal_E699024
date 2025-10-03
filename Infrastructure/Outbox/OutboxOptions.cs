@@ -2,7 +2,7 @@ namespace Infrastructure.Outbox;
 
 // Configuration options for the Outbox service.
 
-public sealed class OutboxProcessorOptions
+public sealed class OutboxOptions
 {
     public const string SectionName = "Config:OutboxProcessor";
 

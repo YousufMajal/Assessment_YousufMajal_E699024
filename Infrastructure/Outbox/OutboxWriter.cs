@@ -1,6 +1,6 @@
 using Application.Interfaces;
+using Application.Interfaces.Repositories;
 using Domain.Entities;
-using Infrastructure.Data;
 using System.Text.Json;
 
 namespace Infrastructure.Outbox;
@@ -8,9 +8,9 @@ namespace Infrastructure.Outbox;
 public sealed class OutboxWriter : IOutboxWriter
 {
     private static readonly JsonSerializerOptions SerializerOptions = new(JsonSerializerDefaults.Web);
-    private readonly ApplicationDbContext _db;
+    private readonly IOutboxRepository _outboxRepository;
 
-    public OutboxWriter(ApplicationDbContext db) => _db = db;
+    public OutboxWriter(IOutboxRepository outboxRepository) => _outboxRepository = outboxRepository;
 
     public void Enqueue<T>(T message, string eventType)
     {
@@ -21,6 +21,6 @@ public sealed class OutboxWriter : IOutboxWriter
             Content = JsonSerializer.Serialize(message, SerializerOptions),
             OccurredOnUtc = DateTime.UtcNow
         };
-        _db.Set<OutboxMessage>().Add(outbox);
+        _outboxRepository.Add(outbox);
     }
 }
